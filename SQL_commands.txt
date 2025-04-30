@@ -1,0 +1,35 @@
+-- Create the database 'facebook_clone' if it does not already exist
+CREATE DATABASE IF NOT EXISTS facebook_clone;
+
+-- Switch to the 'facebook_clone' database for the following operations
+USE facebook_clone;
+
+-- Create the 'facebook_login' table with columns for user information (id, name, email, phone number, password)
+-- (This block is commented out currently)
+-- CREATE TABLE facebook_login (
+--    id INT AUTO_INCREMENT PRIMARY KEY,
+--    name VARCHAR(100) NOT NULL,
+--    email VARCHAR(150) NOT NULL,
+--    phone_number VARCHAR(20),
+--    password VARCHAR(255) NOT NULL
+-- );
+
+-- Insert sample user data into the 'facebook_login' table
+-- (This block is commented out currently)
+-- INSERT INTO facebook_login (name, email, phone_number, password) VALUES
+-- ('Alice Johnson', 'alice.johnson@example.com', '+1234567890', '12345'),
+-- ('Bob Smith', 'bob.smith@example.com', '+1987654321', '12345'),
+-- ('Charlie Davis', 'charlie.davis@example.com', '+1122334455', '12345'),
+-- ('Diana Prince', 'diana.prince@example.com', '+1222333444', '12345'),
+-- ('Evan Lee', 'evan.lee@example.com', '+1555666777', '12345');
+
+-- Display a list of all tables in the current database
+-- (This block is commented out currently)
+-- SHOW TABLES;
+
+-- Show the structure (columns, types, keys) of the 'facebook_login' table
+-- (This block is commented out currently)
+-- DESCRIBE facebook_login;
+
+-- Retrieve and display all records from the 'login_attempts' table
+SELECT * FROM login_attempts;

